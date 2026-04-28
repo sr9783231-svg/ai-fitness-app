@@ -1,0 +1,108 @@
+* { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, rgba(0, 36, 86, 0.85) 0%, rgba(0, 0, 0, 0.95) 100%), url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; color: #fff; display: flex; justify-content: center; min-height: 100vh; margin: 0; }
+.lime { color: #00d4ff; }
+.display-font { font-family: 'Bebas Neue', sans-serif; letter-spacing: .04em; }
+.hidden { display: none !important; }
+input, select { background: #141420; border: 1px solid #2a2a40; color: #e8e8f0; border-radius: 10px; padding: 12px 16px; width: 100%; font-family: 'Outfit', sans-serif; font-size: 15px; margin-bottom: 12px; }
+input:focus, select:focus { outline: none; border-color: #00d4ff; box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.15); }
+label { font-size: 13px; color: #8888a8; font-weight: 500; text-transform: uppercase; display: block; margin-bottom: 6px; }
+button { cursor: pointer; font-family: 'Outfit', sans-serif; border: none; }
+.btn-primary { background: #00d4ff; color: #0a0a0f; border-radius: 12px; padding: 14px 28px; font-size: 15px; font-weight: 700; width: 100%;}
+.btn-primary:hover { background: #33e0ff; transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3); }
+.btn-ghost { background: transparent; color: #00d4ff; border: 1.5px solid #00d4ff; border-radius: 12px; padding: 10px 20px; font-weight: 600; }
+.screen-container { width: 100%; display: flex; flex-direction: column; max-width: 450px; margin: auto 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); border-radius: 20px;}
+.card { background: rgba(17, 17, 24, 0.85); border: 1px solid #1e1e30; border-radius: 18px; padding: 24px; }
+.auth-box { padding: 60px 20px; text-align: center; }
+.logo-header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; font-size: 30px; }
+.logo-icon { width: 38px; height: 38px; background: #00d4ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #0a0a0f; }
+.auth-title { font-size: 44px; line-height: 1.05; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);}
+.toggle-text { margin-top: 15px; cursor: pointer; font-size: 14px; color: #8888a8; }
+.error { color: #f87171; font-size: 14px; margin-top: 10px;}
+.horizontal-layout { width: 100%; max-width: 1100px; height: 85vh; display: flex; flex-direction: row; border-radius: 20px; overflow: hidden; margin: auto 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+.content-area { flex: 1; padding: 40px; overflow-y: auto; }
+.side-nav { width: 250px; background: rgba(13, 13, 21, 0.95); border-right: 1px solid #1e1e30; display: flex; flex-direction: column; padding: 30px 20px; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.stat-card { padding: 20px; text-align: center; }
+.stat-label { font-size: 12px; color: #8888a8; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+.stat-value { font-size: 36px; line-height: 1; }
+.workout-inputs { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; }
+.chat-box { height: 450px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding-right: 15px;}
+.chat-msg { max-width: 85%; padding: 12px 16px; font-size: 14px; line-height: 1.5; white-space: pre-wrap;}
+.msg-user { background: rgba(0, 212, 255, 0.15); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 18px 4px 18px 18px; color: #00d4ff; align-self: flex-end; }
+.msg-ai { background: #141420; border: 1px solid #1e1e30; border-radius: 4px 18px 18px 18px; color: #d8d8e8; align-self: flex-start; }
+.chat-controls { display: flex; gap: 10px; align-items: stretch;}
+.chat-controls input { margin: 0; flex: 1; }
+.chat-controls button { width: 60px; padding: 0; }
+.recording { animation: pulse 1.5s infinite; color: white !important;}
+@keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 71, 87, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); } }
+
+.login-split {
+    max-width: 1000px;
+    flex-direction: row; 
+    gap: 60px; 
+    background: transparent; 
+    backdrop-filter: none; 
+    border: none;
+    align-items: center;
+}
+.auth-info { flex: 1.2; display: flex; flex-direction: column; justify-content: center; }
+.auth-box { flex: 1; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(15px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+@media (max-width: 850px) { .login-split { flex-direction: column; gap: 30px; max-width: 450px; } .auth-info { display: none; } }
+
+
+@keyframes tabFadeIn {
+    0% { opacity: 0; transform: translateY(15px) scale(0.99); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.side-nav .nav-btn {
+    background: transparent;
+    color: #8888a8;
+    border: none;
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.side-nav .nav-btn span {
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+}
+
+.side-nav .nav-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%);
+    border-left: 3px solid #00d4ff;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    opacity: 0;
+    z-index: 1;
+}
+
+.side-nav .nav-btn:hover span {
+    transform: translateX(10px);
+    color: #e8e8f0;
+}
+
+.side-nav .nav-btn.active span {
+    color: #00d4ff;
+    transform: translateX(10px);
+}
+
+.side-nav .nav-btn.active::before {
+    width: 100%;
+    opacity: 1;
+}

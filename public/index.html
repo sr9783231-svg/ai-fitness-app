@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI FITNESS TRAINER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="auth-screen" class="screen-container login-split">
+        <div class="auth-info">
+            <div class="logo-header" style="justify-content: flex-start; margin-bottom: 20px;">
+                <div class="logo-icon">⚡</div><span class="display-font" style="font-size: 36px;">AI<span class="lime">FITNESS TRAINER</span></span>
+            </div>
+            <h1 class="display-font" style="font-size: 54px; line-height: 1; text-align: left; margin-bottom: 15px;">THE FUTURE OF<br><span class="lime">FITNESS IS HERE.</span></h1>
+            <p style="color: #8888a8; font-size: 16px; margin-bottom: 30px; line-height: 1.5;">
+                Stop guessing. Join thousands of users leveraging real-time computer vision and generative AI to correct their biomechanics and crush their fitness goals safely.
+            </p>
+            <div class="stats-grid" style="margin-bottom: 20px; grid-template-columns: 1fr 1fr 1fr;">
+                <div class="card stat-card" style="padding: 15px; background: rgba(0, 212, 255, 0.1); border-color: rgba(0, 212, 255, 0.3);">
+                    <p class="stat-label">Active Users</p>
+                    <p class="display-font stat-value lime" style="font-size: 28px;">12.4K</p>
+                </div>
+                <div class="card stat-card" style="padding: 15px;">
+                    <p class="stat-label">Workouts Logged</p>
+                    <p class="display-font stat-value" style="font-size: 28px;">1.2M+</p>
+                </div>
+                <div class="card stat-card" style="padding: 15px;">
+                    <p class="stat-label">Injury Risk Drop</p>
+                    <p class="display-font stat-value" style="font-size: 28px; color: #ff4757;">↓ 84%</p>
+                </div>
+            </div>
+            <div class="card" style="padding: 20px;">
+                <p class="stat-label" style="text-align: left; margin-bottom: 10px;">AVERAGE USER STRENGTH PROGRESSION (MONTHLY)</p>
+                <canvas id="loginChart" height="100"></canvas>
+            </div>
+        </div>
+
+        <div class="auth-box">
+            <h1 class="display-font auth-title" style="font-size: 40px; margin-bottom: 10px;">WELCOME<br><span class="lime">BACK</span></h1>
+            <p style="color: #8888a8; font-size: 15px; margin-bottom: 25px; font-style: italic;">"Calculate your trajectory, put in the reps. Let's work."</p>
+            <div id="auth-form" class="card" style="padding: 30px;">
+                <h3 id="auth-mode-title" class="display-font" style="font-size: 24px; margin-bottom: 15px; text-align: left;">Sign In</h3>
+                <input type="text" id="username" placeholder="Username">
+                <input type="password" id="password" placeholder="Password">
+                <button class="btn-primary" style="margin-top: 10px;" onclick="handleAuth()">Continue</button>
+                <p class="toggle-text" onclick="toggleAuth()">Don't have an account? <span class="lime">Sign Up</span></p>
+                <p id="auth-msg" class="error"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="onboarding-screen" class="screen-container hidden" style="padding-top: 40px;">
+        <h2 class="display-font" style="font-size: 36px; text-align: center;">LET'S GET <span class="lime">STARTED</span></h2>
+        <div class="card" style="margin: 0 20px;">
+            <label>Age</label> <input type="number" id="ob-age">
+            <label>Gender</label> <select id="ob-gender"><option value="male">Male</option><option value="female">Female</option></select>
+            <label>Height (cm)</label> <input type="number" id="ob-height">
+            <label>Weight (kg)</label> <input type="number" id="ob-weight">
+            <label>Primary Goal</label> <select id="ob-goal"><option value="loss">Weight Loss</option><option value="maintain">Maintain</option><option value="gain">Build Muscle</option></select>
+            <label>Activity Level</label> <select id="ob-activity"><option value="1.2">Sedentary</option><option value="1.55">Moderate</option><option value="1.9">Very Active</option></select>
+            <button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="completeOnboarding()">Go to Dashboard →</button>
+        </div>
+    </div>
+
+    <div id="app-screen" class="horizontal-layout hidden">
+        
+        <div class="side-nav">
+            <div class="logo-header" style="justify-content: flex-start; margin-bottom: 40px; margin-top: 10px;">
+                <div class="logo-icon" style="width: 30px; height: 30px; font-size: 16px;">⚡</div><span class="display-font" style="font-size: 24px;">FIT<span class="lime">AI</span></span>
+            </div>
+            <button class="nav-btn active" onclick="switchTab('home', event)"><span>Dashboard</span></button>
+            <button class="nav-btn" onclick="switchTab('workout', event)"><span>Workouts</span></button>
+            <button class="nav-btn" onclick="switchTab('mealplan', event)"><span>Meal Plan</span></button>
+            <button class="nav-btn" onclick="switchTab('nutrition', event)"><span>Scanner</span></button>
+            <button class="nav-btn" onclick="switchTab('pose', event)"><span>Pose AI</span></button>
+            <button class="nav-btn" onclick="switchTab('chat', event)"><span>Coach</span></button>
+            <button class="nav-btn" onclick="switchTab('profile', event)"><span>Profile</span></button>
+            <button class="btn-ghost" style="margin-top: auto; width: 100%;" onclick="logout()">Sign Out</button>
+        </div>
+
+        <div class="content-area">
+            
+            <div id="tab-home" class="tab-section">
+                <p class="greeting" style="color: #00d4ff; font-size: 14px; font-weight: 600; text-transform: uppercase;">CONSISTENCY IS THE ULTIMATE FORMULA. WELCOME BACK,</p>
+                <h2 id="user-display-name" class="display-font" style="font-size: 40px;">USER</h2>
+                
+                <div class="card" style="margin-top: 20px; padding: 15px; border-color: rgba(0, 212, 255, 0.3); text-align: center;">
+                    <p class="stat-label">DAILY MOTIVATION</p>
+                    <div id="daily-quote" style="color: #d8d8e8; font-size: 16px;">Loading...</div>
+                </div>
+
+                <div class="stats-grid" style="margin-top: 20px;">
+                    <div class="card stat-card"><p class="stat-label">YOUR BMI</p><p id="home-bmi" class="display-font stat-value lime">--</p></div>
+                    <div class="card stat-card"><p class="stat-label">DAILY KCAL TARGET</p><p id="home-kcal" class="display-font stat-value" style="color: #60a5fa;">--</p></div>
+                </div>
+                <div class="card" style="margin-top: 20px; padding: 20px;"><p class="stat-label">WEIGHT PROGRESS</p><canvas id="weightChart" height="80"></canvas></div>
+            </div>
+
+            <div id="tab-workout" class="tab-section hidden">
+                <h2 class="display-font" style="font-size: 36px;">WORKOUT <span class="lime">LOGGER</span></h2>
+                <p style="color: #88889a; margin-bottom: 20px;">Track the variables. Every heavy set is data for your overall growth.</p>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="workout-inputs">
+                        <input type="text" id="wo-exercise" placeholder="Exercise">
+                        <input type="number" id="wo-sets" placeholder="Sets">
+                        <input type="number" id="wo-reps" placeholder="Reps">
+                        <input type="number" id="wo-weight" placeholder="Weight (kg)">
+                    </div>
+                    <button class="btn-primary" style="margin-top: 10px;" onclick="logWorkout()">Save Workout</button>
+                </div>
+                <div class="card"><div id="workout-history-list" style="max-height: 300px; overflow-y: auto;"></div></div>
+            </div>
+
+            <div id="tab-mealplan" class="tab-section hidden">
+                <h2 class="display-font" style="font-size: 36px;">AI <span class="lime">MEAL PLANNER</span></h2>
+                <p style="color: #88889a; margin-bottom: 20px;">Fuel your system from the earth up. Clean energy for peak performance.</p>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                        <div><label>Duration</label><select id="mp-duration"><option value="1-Day">1 Day</option><option value="3-Day">3 Days</option></select></div>
+                        <div><label>Diet Type</label><select id="mp-diet"><option value="No Restrictions">Standard</option><option value="Vegetarian">Vegetarian</option><option value="Vegan">Vegan</option><option value="Keto">Keto</option></select></div>
+                        <div><label>Meals per Day</label><select id="mp-meals"><option value="3 Meals">3 Meals</option><option value="4 Meals">4 Meals</option><option value="5 Small Meals">5 Small</option></select></div>
+                    </div>
+                    <button class="btn-primary" style="margin-top: 15px;" onclick="generateMealPlan()">Generate My Plan</button>
+                </div>
+                <div id="mealplan-result" class="card hidden" style="border-color: #00d4ff;">
+                    <div id="mealplan-text" style="color: #d8d8e8; line-height: 1.6; white-space: pre-wrap;"></div>
+                </div>
+            </div>
+
+            <div id="tab-nutrition" class="tab-section hidden">
+                <h2 class="display-font" style="font-size: 36px;">AI <span class="lime">MACRO SCANNER</span></h2>
+                <div class="card">
+                    <input type="file" id="food-upload" accept="image/*" onchange="previewFoodImage()">
+                    <img id="food-preview" class="hidden" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin: 15px 0;">
+                    <button class="btn-primary" onclick="analyzeFood()">Scan Meal</button>
+                </div>
+                <div id="food-result-card" class="card hidden" style="margin-top: 20px;"><div id="food-result-text" style="white-space: pre-wrap;"></div></div>
+            </div>
+
+            <div id="tab-pose" class="tab-section hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h2 class="display-font" style="font-size: 36px;">REAL POSE <span class="lime">AI</span></h2>
+                        <p id="pose-ai-status" style="color: #ff4757; font-weight: bold;">Loading AI Model...</p>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.5); padding: 5px; border-radius: 12px; display: flex; gap: 5px; border: 1px solid #1e1e30;">
+                        <button id="toggle-img-btn" class="btn-primary" style="padding: 8px 15px; border-radius: 8px; width: auto;" onclick="switchPoseMode('image')">📷 Image</button>
+                        <button id="toggle-vid-btn" class="btn-ghost" style="padding: 8px 15px; border-radius: 8px; width: auto; border: none; color: #8888a8;" onclick="switchPoseMode('video')">🎥 Video</button>
+                        <button id="toggle-cam-btn" class="btn-ghost" style="padding: 8px 15px; border-radius: 8px; width: auto; border: none; color: #8888a8;" onclick="switchPoseMode('camera')">🔴 Live Cam</button>
+                    </div>
+                </div>
+                
+                <div id="pose-image-section" class="card">
+                    <input type="file" id="pose-upload" accept="image/*" onchange="previewPoseImage()">
+                    <img id="pose-preview" class="hidden" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; margin: 15px 0;">
+                    <button class="btn-primary" style="width: 100%;" onclick="analyzePose()">Analyze Image Form</button>
+                </div>
+
+                <div id="pose-video-section" class="card hidden">
+                    <div id="video-upload-ui">
+                        <input type="file" id="pose-vid-upload" accept="video/mp4,video/quicktime" onchange="previewPoseVideo()">
+                    </div>
+                    <div style="position: relative; width: 100%; margin: 15px 0; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0, 212, 255, 0.3);">
+                        <video id="pose-vid-preview" class="hidden" controls playsinline style="width: 100%; display: block;"></video>
+                        <canvas id="pose-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="btn-start-video" class="btn-primary hidden" style="width: 100%; background: #ff4757; color: white;" onclick="startVideoTracking()">▶️ Track Video File</button>
+                        <button id="btn-start-cam" class="btn-primary hidden" style="width: 100%; background: #ff4757; color: white;" onclick="startWebcamTracking()">🔴 Start Live Camera</button>
+                        <button id="btn-analyze-cam" class="btn-primary hidden" style="width: 100%;" onclick="captureAndAnalyzeCam()">📸 Analyze Form</button>
+                        <button id="btn-stop-cam" class="btn-ghost hidden" style="width: auto; border-color: #ff4757; color: #ff4757;" onclick="stopCamera()">Stop</button>
+                    </div>
+                </div>
+
+                <div id="pose-result-card" class="card hidden" style="margin-top: 20px; border-color: #00d4ff;">
+                    <div id="pose-result-text" style="color: #d8d8e8; line-height: 1.6; font-size: 16px; white-space: pre-wrap;"></div>
+                </div>
+            </div>
+
+            <div id="tab-chat" class="tab-section hidden">
+                <h2 class="display-font" style="font-size: 36px;">AI <span class="lime">COACH</span></h2>
+                <div id="chat-history" class="chat-box"></div>
+                <div class="chat-controls">
+                    <input type="text" id="chat-input" placeholder="Message AI...">
+                    <button id="speaker-btn" class="btn-ghost" style="width: auto; padding: 0 15px; border-color: #00d4ff;" onclick="toggleAIVoice()">🔊</button>
+                    <button id="mic-btn" class="btn-primary" onclick="startVoiceChat()">🎤</button>
+                    <button class="btn-primary" onclick="sendChat()">→</button>
+                </div>
+            </div>
+
+            <div id="tab-profile" class="tab-section hidden">
+                <h2 class="display-font" style="font-size: 36px;">ACCOUNT <span class="lime">INFO</span></h2>
+                <div class="card" style="padding: 30px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div><label>Age</label> <input type="number" id="age"></div>
+                        <div><label>Gender</label> <select id="gender"><option value="male">Male</option><option value="female">Female</option></select></div>
+                        <div><label>Height (cm)</label> <input type="number" id="height"></div>
+                        <div><label>Weight (kg)</label> <input type="number" id="weight"></div>
+                    </div>
+                    <label style="margin-top: 15px;">Goal</label> <select id="goal"><option value="loss">Weight Loss</option><option value="maintain">Maintain</option><option value="gain">Build Muscle</option></select>
+                    <label>Activity Level</label> <select id="activity"><option value="1.2">Sedentary</option><option value="1.55">Moderate</option><option value="1.9">Very Active</option></select>
+                    <button class="btn-primary" style="margin-top: 25px;" onclick="saveProfile(false)">Update Stats</button>
+                    <p id="profile-msg"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

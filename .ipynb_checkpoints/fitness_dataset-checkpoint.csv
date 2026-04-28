@@ -1,0 +1,31 @@
+id,exercise_name,category,equipment,difficulty,target_muscle,calories_per_min
+101,Barbell Bench Press,Strength,Barbell,Intermediate,Chest,6.5
+102,Incline Dumbbell Press,Strength,Dumbbell,Intermediate,Chest,6.0
+103,Push-ups,Calisthenics,Bodyweight,Beginner,Chest,5.5
+104,Cable Crossover,Hypertrophy,Cable,Intermediate,Chest,5.0
+105,Strict Overhead Press,Strength,Barbell,Advanced,Shoulders,6.0
+106,Lateral Raises,Hypertrophy,Dumbbell,Beginner,Shoulders,4.0
+107,Front Raises,Hypertrophy,Dumbbell,Beginner,Shoulders,4.0
+108,Face Pulls,Rehab,Cable,Beginner,Rear Delts,3.5
+109,Barbell Back Squat,Strength,Barbell,Advanced,Quads,8.5
+110,Leg Press,Hypertrophy,Machine,Beginner,Quads,7.0
+111,Bulgarian Split Squat,Strength,Dumbbell,Advanced,Quads,8.0
+112,Leg Extensions,Hypertrophy,Machine,Beginner,Quads,4.5
+113,Conventional Deadlift,Strength,Barbell,Advanced,Hamstrings,9.0
+114,Romanian Deadlift (RDL),Strength,Dumbbell,Intermediate,Hamstrings,7.5
+115,Lying Leg Curls,Hypertrophy,Machine,Beginner,Hamstrings,4.5
+116,Pull-ups,Calisthenics,Bodyweight,Intermediate,Lats,7.0
+117,Lat Pulldown,Hypertrophy,Cable,Beginner,Lats,5.0
+118,Barbell Row,Strength,Barbell,Intermediate,Lats,7.5
+119,Seated Cable Row,Hypertrophy,Cable,Beginner,Mid Back,5.5
+120,Barbell Curl,Hypertrophy,Barbell,Beginner,Biceps,4.0
+121,Hammer Curl,Hypertrophy,Dumbbell,Beginner,Biceps,4.0
+122,Preacher Curl,Hypertrophy,Machine,Intermediate,Biceps,3.5
+123,Tricep Rope Pushdown,Hypertrophy,Cable,Beginner,Triceps,4.0
+124,Overhead Tricep Extension,Hypertrophy,Dumbbell,Intermediate,Triceps,4.5
+125,Skullcrushers,Strength,EZ Bar,Intermediate,Triceps,5.0
+126,Standing Calf Raises,Hypertrophy,Machine,Beginner,Calves,3.5
+127,Hanging Leg Raises,Core,Bodyweight,Advanced,Abs,5.0
+128,Cable Crunches,Core,Cable,Intermediate,Abs,4.5
+129,Plank,Core,Bodyweight,Beginner,Abs,3.5
+130,Kettlebell Swings,Power,Kettlebell,Intermediate,Full Body,9.5
